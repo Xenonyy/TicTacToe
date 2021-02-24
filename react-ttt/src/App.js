@@ -1,6 +1,7 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
+import Grid from './components/Grid/Grid';
+import './css/Main.scss';
+
 
 function App() {
     const [data, setData] = React.useState(null);
@@ -11,14 +12,10 @@ function App() {
         .then((data) => setData(data.message));
     }, []);
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
-    </div>
-  );
+  return ([
+	<div id = "backend-test">{!data ? "Loading..." : data}</div>,
+	<Grid />
+  ]);
 }
 
 export default App;

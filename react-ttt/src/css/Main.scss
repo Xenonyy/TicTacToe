@@ -1,0 +1,13 @@
+@import "../components/Grid/Grid.css";
+
+%flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-flow: row;
+}
+
+#backend-test {
+    @extend %flex;
+}
