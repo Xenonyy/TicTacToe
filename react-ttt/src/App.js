@@ -1,4 +1,5 @@
 import React from 'react';
+import { Chat } from './components/Chat/Chat';
 import Grid from './components/Grid/Grid';
 import './css/Main.scss';
 
@@ -14,7 +15,8 @@ function App() {
 
   return ([
 	<div id = "backend-test">{!data ? "Loading..." : data}</div>,
-	<Grid />
+	<Grid />,
+  <Chat />
   ]);
 }
 
