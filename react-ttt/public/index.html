@@ -12,32 +12,65 @@
 		<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 		<title>React App</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js" integrity="sha512-oFOCo2/3DtjrJG4N27BjSLQWoiBv171sK6a+JiWjp/7agxC2nCUP358AqzxkBUb5jX8g6CYLPdSKQTbC0weCwA==" crossorigin="anonymous"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script defer>
-		const socket = io();
-	
-		window.onload = () => {
-			const form = document.querySelector('#form');
-			const input = document.querySelector('#input');
-			const chat = document.querySelector("#chat-container");
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js" integrity="sha512-oFOCo2/3DtjrJG4N27BjSLQWoiBv171sK6a+JiWjp/7agxC2nCUP358AqzxkBUb5jX8g6CYLPdSKQTbC0weCwA==" crossorigin="anonymous"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous"></script>
+		<script defer>
+			const socket = io();
 		
-			form.addEventListener('submit', (e) => {
-			e.preventDefault();
-			if (input.value) {
-				socket.emit('chat message', input.value);
-				input.value = '';
+			window.onload = () => {
+				const form = document.querySelector('#form');
+				const input = document.querySelector('#input');
+				const chat = document.querySelector("#chat-container");
+			
+				form.addEventListener('submit', (e) => {
+				e.preventDefault();
+				if (input.value.length > 0) {
+					socket.emit('chat message', input.value);
+					input.value = '';
+				}
+				});
+				socket.on('chat message', (msg) => {
+					const item = document.createElement('li');
+					item.textContent = msg;
+					messages.appendChild(item);
+					chat.scrollTo(0, chat.scrollHeight);
+				});
+
+				// Usernames
+				let userName = prompt("What is your desired username?");
+				socket.emit('new user', userName);
+
+				// Typing...
+				var typing = false;
+				var timeout = undefined;
+
+				const typingTimeout = () => { 
+					typing = false;
+					socket.emit('typing', "");
+				}
+				input.addEventListener('keypress', (e) => {
+					if(e.which != 13) {
+						typing = true;
+						socket.emit('typing', `${userName} is typing a message...`);
+						clearTimeout(timeout);
+						timeout = setTimeout(typingTimeout, 2000);
+					} else {
+						timeout = setTimeout(typingTimeout, 2000);
+					}
+					if (e.keyCode === 13) {
+						typing = false;
+						socket.emit('typing', "");
+					}
+					socket.on('typing', (data) => {
+						document.getElementById("typing").innerText = data;
+					});
+				});
 			}
-			});
-			socket.on('chat message', (msg) => {
-				const item = document.createElement('li');
-				item.textContent = msg;
-				messages.appendChild(item);
-				chat.scrollTo(0, chat.scrollHeight);
-			});
-		}
-		
-	  </script>
+		</script>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>

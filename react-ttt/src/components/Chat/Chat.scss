@@ -12,9 +12,17 @@
     align-items: baseline;
     background-color: #1d1d1d;
     width: inherit;
-    height: 80%;
+    height: 100%;
     overflow-x: auto;
     padding: 0.5em;
+}
+#typing {
+    width: fit-content;
+    height: 2em;
+    // background-color: pink;
+    position: absolute;
+    bottom: 2em;
+    @extend %flex;
 }
 #form {
     background: rgba(0, 0, 0, 0.15);
@@ -58,6 +66,6 @@
     color: bisque;
     display: flex;
 }
-// #messages > li:nth-child(odd) {
-//     background: #efefef;
-// }
+#messages > li:nth-child(odd) {
+    background: #2d2d2d;
+}

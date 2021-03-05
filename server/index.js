@@ -22,16 +22,29 @@ app.get('*', (req, res) => {
 
 // Socket.io
 io.on('connection', (socket) => {
-	io.emit('chat message',`${socket.id} has connected.`);
-	console.log('A user has connected.');
-	socket.on('disconnect', () => {
-		io.emit('chat message',`${socket.id} has disconnected.`);
-		console.log('A user has disconnected.');
-	});
-	socket.on('chat message', (msg) => {
-		console.log(`message: ${msg}`);
-		io.emit('chat message', `${socket.id} - ${msg}`);
+	socket.on('new user', (userName) => {
+		let newUser = userName;
+		console.log(newUser);
+		io.emit('chat message',`Welcome to the chatroom ${userName}!`);
+		console.log('A user has connected.');
+		socket.on('disconnect', () => {
+			io.emit('chat message',`${userName} has disconnected.`);
+			console.log('A user has disconnected.');
+		});
+		socket.on('chat message', (msg) => {
+			console.log(`message: ${msg}`);
+			io.emit('chat message', `${userName} - ${msg}`);
+			socket.on('typing', (data) => {
+				socket.broadcast.emit('typing', data);
+			});
+		});
+
 	})
+	
+	// Handle typing event
+	// socket.on('typing', (data) =>{
+    //      io.emit('display', data)
+	// });
 });
 
 

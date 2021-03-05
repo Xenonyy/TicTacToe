@@ -3,7 +3,6 @@ import { Chat } from './components/Chat/Chat';
 import Grid from './components/Grid/Grid';
 import './css/Main.scss';
 
-
 function App() {
     const [data, setData] = React.useState(null);
 
